@@ -1,0 +1,211 @@
+Data prophet :Report
+(link -https://github.com/tachionaw/one-player-pong/tree/master)
+Question 1-language classification problem
+%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+import seaborn as sns
+import statsmodels.api as sm
+from sklearn import linear_model
+from sklearn.cluster import KMeans
+import sklearn.metrics as  sm
+from sklearn.preprocessing import LabelEncoder
+from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import silhouette_score
+from sklearn.metrics import adjusted_rand_score
+from sklearn import metrics
+from patsy import dmatrices
+from sklearn.linear_model import LogisticRegression
+import statsmodels.discrete.discrete_model as sm
+from sklearn import datasets,linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+>>> from sklearn.pipeline import Pipeline
+>>> text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
+...                      ('tfidf', TfidfTransformer()),
+...                      ('clf', MultinomialNB()),
+... ])
+import nltk
+nltk.download()
+from nltk.stem.snowball import SnowballStemmer
+stemmer = SnowballStemmer("english", ignore_stopwords=True)
+class StemmedCountVectorizer(CountVectorizer):
+    def build_analyzer(self):
+        analyzer = super(StemmedCountVectorizer, self).build_analyzer()
+        return lambda doc: ([stemmer.stem(w) for w in analyzer(doc)])
+stemmed_count_vect = StemmedCountVectorizer(stop_words='english')
+text_mnb_stemmed = Pipeline([('vect', stemmed_count_vect),
+...                      ('tfidf', TfidfTransformer()),
+...                      ('mnb', MultinomialNB(fit_prior=False)),
+... ])
+text_mnb_stemmed = text_mnb_stemmed.fit(twenty_train.data, twenty_train.target)
+predicted_mnb_stemmed = text_mnb_stemmed.predict(twenty_test.data)
+np.mean(predicted_mnb_stemmed == twenty_test.target)
+
+Bonus Questions:
+To improve your chances, answer the following questions in your report. You may include these answers as part of discussions throughout your report, or answer them directly in a separate section.
+
+1.	Discuss two machine learning approaches (other than the one you used in your language classification implementation) that would also be able to perform the task. Explain how these methods could be applied instead of your chosen method.
+
+we can use the NLP in python to classify the languages (training and validation) ,the training set is used to fit the models; the validation set is used to estimate prediction error for model selection; the test set is used for assessment of the generalization error of the final chosen model. Ideally, the test set should be kept in a “vault,” and be brought out only at the end of the data analysis
+
+2.	Explain the difference between supervised and unsupervised learning.
+
+Supervised: The algorithm that consist of a target / outcome variable (or dependent variable) is to be predicted from a given set of predictors (independent variables). Using these set of variables, we generate a function that map inputs to desired outputs. The training process continues until the model achieves a desired level of accuracy on the training data.
+
+ Examples of Supervised Learning
+Regression, Decision Tree, Random Forest, KNN, Logistic Regression
+
+Unsupervised learning
+In this algorithm, we do not have any target or outcome variable to predict / estimate.  It is used for clustering population in different groups, which is widely used for segmenting customers in different groups for specific intervention. Examples of Unsupervised Learning: Apriori algorithm, K-means.
+
+3.	Explain the difference between classification and regression.
+Regression is used to predict continuous values.Classification is used to predict which class a data point is part of (discrete value)
+
+4.	In supervised classification tasks, we are often faced with datasets in which one of the classes is much more prevalent than any of the other classes. This condition is called class imbalance. Explain the consequences of class imbalance in the context of machine learning.
+
+5.	Explain how any negative consequences of the class imbalance problem (explained in question 4) can be mitigated.
+
+6.	Provide a short overview of the key differences between deep learning and any non-deep learning method.
+deep learning -Algorithms that parse data, learn from that data, and then apply what they’ve learned to make informed decisions, the algorithms are capable of determining on their own if the prediction are accurate or not.
+non-deep learning –algorithms are not capable of making decisions on their own  it has low capabilities
+
+
+
+
+
+
+
+Question 2 option A (link -https://github.com/tachionaw/one-player-pong/tree/master)
+import pygame
+	
+
+	BLACK = (0,0,0)
+	
+	RED = (255,0,0)
+	
+	
+	
+
+	pygame.init()
+	
+
+	#Initializing the display window
+	size = (800,600)
+	screen = pygame.display.set_mode(size)
+	pygame.display.set_caption("pong")
+	
+
+	#Starting coordinates of the paddle
+	rect_x = 400
+	rect_y = 580
+	
+
+	#initial speed of the paddle
+	rect_change_x = 0
+	rect_change_y = 0
+	
+
+	#initial position of the ball
+	ball_x = 50
+	ball_y = 50
+	
+
+	#speed of the ball
+	ball_change_x = 8
+	ball_change_y = 8
+	
+
+	score = 6
+	
+
+	#draws the paddle. Also restricts its movement between the edges
+	#of the window.
+	def drawrect(screen,x,y):
+	    if x <= 0:
+	        x = 0
+	    if x >= 699:
+	        x = 699    
+	    pygame.draw.rect(screen,RED,[x,y,0,1])
+	     
+	
+
+	'''def drawball(screen,x,y):
+	    if x<0:
+	        x=0
+	        ball_change_x = ball_change_x * -1
+	    elif x>785:
+	        x=785
+	        ball_change_x = ball_change_x * -1
+	    elif y<0:
+	        y=0
+	        ball_change_y = ball_change_y * -1
+	    elif x>rect_x and x<rect_x+100 and y==565:
+	        ball_change_y = ball_change_y * -1
+	    elif y>600:
+	        ball_change_y = ball_change_y * -1                        
+	    pygame.draw.rect(screen,WHITE,[x,y,15,15])'''
+	    
+	#game's main loop    
+	done = False
+	clock=pygame.time.Clock()
+	while not done:
+	    for event in pygame.event.get():
+	        if event.type == pygame.QUIT:
+	            done = True
+	        elif event.type == pygame.KEYDOWN:
+	            if event.key == pygame.K_LEFT:
+	                rect_change_x = -6
+	            elif event.key == pygame.K_RIGHT:
+	                rect_change_x = 6
+	            #elif event.key == pygame.K_UP:
+	                #rect_change_y = -6
+	            #elif event.key == pygame.K_DOWN:
+	                #rect_change_y = 6'''            
+	        elif event.type == pygame.KEYUP:
+	            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+	                rect_change_x = 0
+	            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+	                rect_change_y = 0            
+	    screen.fill(BLACK)
+	    rect_x += rect_change_x
+	    rect_y += rect_change_y
+	    
+	    ball_x += ball_change_x
+	    ball_y += ball_change_y
+	    
+	    
+	    #this handles the movement of the ball.
+	    if ball_x<0:
+	        ball_x=0
+	        ball_change_x = ball_change_x * -1
+	    elif ball_x>785:
+	        ball_x=785
+	        ball_change_x = ball_change_x * -1
+	    elif ball_y<0:
+	        ball_y=0
+	        ball_change_y = ball_change_y * -1
+	    elif ball_x>rect_x and ball_x<rect_x+100 and ball_y==565:
+	        ball_change_y = ball_change_y * -1
+	        score = score + 1
+	    elif ball_y>600:
+	        ball_change_y = ball_change_y * -1
+	        score = 0                        
+	    pygame.draw.rect(screen,WHITE,[ball_x,ball_y,15,15])
+	    
+	    #drawball(screen,ball_x,ball_y)
+	    drawrect(screen,rect_x,rect_y)
+	    
+	    #score board
+	    font= pygame.font.SysFont('Calibri', 15, False, False)
+	    text = font.render("Score = " + str(score), True, BLACK)
+	    screen.blit(text,[0,1])    
+	       
+	    pygame.display.flip()         
+	    clock.tick(60)
+	    
+	pygame.quit()
+
